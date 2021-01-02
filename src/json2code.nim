@@ -31,11 +31,7 @@ func headUpper(text: string): string =
 proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
   case self.kind
   of JObject, JArray:
-    var node: Node
-    node.id = nodeId
-    node.name = objName
-    node.node = self
-    result.add(node)
+    result.add(Node(id: nodeId, name: objName, node: self))
 
     case self.kind
     of JObject:
