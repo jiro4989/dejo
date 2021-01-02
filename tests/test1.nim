@@ -1,6 +1,6 @@
 import unittest
 
-include APPNAME
+include json2code
 
 suite "suite":
   test "test":
