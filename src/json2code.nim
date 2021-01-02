@@ -5,7 +5,7 @@
 ##  let s = """{"strVal":"hello","intVal":1,"floatVal":1.2,"boolVal":true}"""
 ##  echo s.parseJson.parse
 
-import json, tables, strformat, strutils
+import json, tables, strformat, strutils, algorithm
 
 type
   Node* = object
@@ -25,6 +25,9 @@ const
     }.toTable
   }.toTable
 
+func headUpper(text: string): string =
+  return text[0].toUpperAscii & text[1..^1]
+
 proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
   case self.kind
   of JObject, JArray:
@@ -38,7 +41,7 @@ proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
     of JObject:
       for k, v in self.getFields:
         inc(nodeId)
-        result.add(v.parse(nodeId, objName = k))
+        result.add(v.parse(nodeId, objName = k.headUpper))
     of JArray:
       if 0 < self.elems.len():
         let child = self.elems[0]
@@ -49,19 +52,21 @@ proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
 
 func generateNimCode(self: Node): string =
   var lines: seq[string]
-  lines.add(&"""  {self.name} = ref object""")
+  lines.add(&"""  {self.name}* = ref object""")
   for k, v in self.node.getFields:
-    let t = kindMap["nim"][v.kind]
+    let t =
+      if v.kind == JObject:
+        k.headUpper
+      else:
+        kindMap["nim"][v.kind]
     lines.add(&"""    {k}*: {t}""")
   return lines.join("\n")
 
 func generateNimCode*(self: seq[Node]): string =
   var lines = @["type"]
-  for node in self:
+  for node in self.sortedByIt(it.id):
     lines.add(node.generateNimCode())
   return lines.join("\n")
-
-import algorithm
 
 var id = 0
 echo """
@@ -83,6 +88,13 @@ id = 0
 echo """
 {"person":{"firstName":"taro","lastName":"tanaka"},"age":20}
 """.parseJson.parse(id)
+
+id = 0
+echo """
+{"person":{"firstName":"taro","lastName":"tanaka"},"age":20}
+""".parseJson.parse(id).generateNimCode
+
+echo "==="
 
 # id = 0
 # doAssert """
