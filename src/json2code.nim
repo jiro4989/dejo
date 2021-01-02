@@ -64,5 +64,14 @@ doAssert """
   Node(id: 2, fields: {"b":JBool}.toTable),
 ]
 
+id = 0
+doAssert """
+{"obj1":{"a":1},"obj2":{"b":2}}
+""".parseJson.parse(id).sortedByIt(it.id) == @[
+  Node(id: 0, fields: {"obj1":JObject, "obj2":JObject}.toTable),
+  Node(id: 1, fields: {"a":JInt}.toTable),
+  Node(id: 2, fields: {"b":JInt}.toTable),
+]
+
 when isMainModule and not defined modeTest:
   discard
