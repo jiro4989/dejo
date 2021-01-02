@@ -5,7 +5,7 @@
 ##  let s = """{"strVal":"hello","intVal":1,"floatVal":1.2,"boolVal":true}"""
 ##  echo s.parseJson.parse
 
-import json, tables
+import json, tables, strformat, strutils
 
 type
   Node* = object
@@ -13,30 +13,53 @@ type
     name*: string
     node*: JsonNode
 
-proc parse*(self: JsonNode, nodeId: var int, objName = "Object", publicField = false): seq[Node] =
+const
+  kindMap* = {
+    "nim": {
+      JObject: "",
+      JArray: "",
+      JString: "string",
+      JInt: "int64",
+      JFloat: "float64",
+      JBool: "bool",
+    }.toTable
+  }.toTable
+
+proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
   case self.kind
-  of JObject:
+  of JObject, JArray:
     var node: Node
     node.id = nodeId
     node.name = objName
     node.node = self
     result.add(node)
 
-    for k, v in self.getFields:
-      inc(nodeId)
-      result.add(v.parse(nodeId, objName = k))
-  of JArray:
-    var node: Node
-    node.id = nodeId
-    node.name = objName
-    node.node = self
-    result.add(node)
-
-    if 0 < self.elems.len():
-      let child = self.elems[0]
-      inc(nodeId)
-      result.add(child.parse(nodeId, objName = objName))
+    case self.kind
+    of JObject:
+      for k, v in self.getFields:
+        inc(nodeId)
+        result.add(v.parse(nodeId, objName = k))
+    of JArray:
+      if 0 < self.elems.len():
+        let child = self.elems[0]
+        inc(nodeId)
+        result.add(child.parse(nodeId, objName = objName))
+    else: discard
   else: discard
+
+func generateNimCode(self: Node): string =
+  var lines: seq[string]
+  lines.add(&"""  {self.name} = ref object""")
+  for k, v in self.node.getFields:
+    let t = kindMap["nim"][v.kind]
+    lines.add(&"""    {k}*: {t}""")
+  return lines.join("\n")
+
+func generateNimCode*(self: seq[Node]): string =
+  var lines = @["type"]
+  for node in self:
+    lines.add(node.generateNimCode())
+  return lines.join("\n")
 
 import algorithm
 
@@ -44,6 +67,13 @@ var id = 0
 echo """
 {"strVal":"hello","intVal":1,"floatVal":1.2,"boolVal":true}
 """.parseJson.parse(id)
+
+id = 0
+echo """
+{"strVal":"hello","intVal":1,"floatVal":1.2,"boolVal":true}
+""".parseJson.parse(id).generateNimCode
+
+echo "==="
 
 # doAssert """
 # {"strVal":"hello","intVal":1,"floatVal":1.2,"boolVal":true}
