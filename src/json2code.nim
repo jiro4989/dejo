@@ -11,22 +11,21 @@ type
   Node* = object
     id*: int
     fields*: Table[string, JsonNodeKind]
-    dependsNodeId: int
 
-var
-  autoIncrementNodeId = 0
-
-proc parse*(self: JsonNode, objName = "Object", publicField = false): Node =
+proc parse*(self: JsonNode, nodeId: var int, objName = "Object", publicField = false): seq[Node] =
   # フィールドを公開するときに指定する文字列
-  result.id = autoIncrementNodeId
+  var node: Node
+  node.id = nodeId
   case self.kind
   of JObject:
     for k, v in self.getFields:
+      node.fields[k] = v.kind
       case v.kind
       of JObject:
-        discard # TODO
-      else:
-        result.fields[k] = v.kind
+        inc(nodeId)
+        result.add(v.parse(nodeId))
+      else: discard
+    result.add(node)
   of JArray:
     # let seqObjName = &"Seq{objName.headUpper()}"
     # if 0 < self.elems.len():
@@ -41,7 +40,29 @@ proc parse*(self: JsonNode, objName = "Object", publicField = false): Node =
     discard
   else: discard
 
-doAssert """{"strVal":"hello","intVal":1,"floatVal":1.2,"boolVal":true}""".parseJson.parse == Node(fields: {"strVal":JString, "intVal":JInt, "floatVal":JFloat, "boolVal":JBool}.toTable)
+import algorithm
+
+var id = 0
+doAssert """
+{"strVal":"hello","intVal":1,"floatVal":1.2,"boolVal":true}
+""".parseJson.parse(id) == @[Node(fields: {"strVal":JString, "intVal":JInt, "floatVal":JFloat, "boolVal":JBool}.toTable)]
+
+id = 0
+doAssert """
+{"obj":{"s":"hello","i":1},"s":"world"}
+""".parseJson.parse(id).sortedByIt(it.id) == @[
+  Node(id: 0, fields: {"obj":JObject, "s":JString}.toTable),
+  Node(id: 1, fields: {"s":JString, "i":JInt}.toTable),
+]
+
+id = 0
+doAssert """
+{"obj":{"s":"hello","i":1,"obj":{"b":true}},"s":"world"}
+""".parseJson.parse(id).sortedByIt(it.id) == @[
+  Node(id: 0, fields: {"obj":JObject, "s":JString}.toTable),
+  Node(id: 1, fields: {"s":JString, "i":JInt,"obj":JObject}.toTable),
+  Node(id: 2, fields: {"b":JBool}.toTable),
+]
 
 when isMainModule and not defined modeTest:
   discard
