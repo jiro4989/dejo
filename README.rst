@@ -4,17 +4,9 @@ dejo
 
 |nimble-version| |nimble-install| |gh-actions|
 
-TODO
-
-This is a Nim project template.
-You must run command at first.
-
-.. code-block:: shell
-
-   nim c tool/setup.nim
-   tool/setup --author:<yourname> --appname:<application_name>
-
-This command replace and rename template strings of this repository.
+dejo generates multiple language object definitions from json documents.
+This was inspired by `gojson <https://github.com/ChimeraCoder/gojson>`_ and
+`nimjson <https://github.com/jiro4989/nimjson>`_.
 
 .. contents:: Table of contents
 
