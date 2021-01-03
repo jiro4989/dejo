@@ -1,2 +1,4 @@
 /bin/
 tests/test1
+
+tests/test_parser
