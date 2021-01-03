@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "jiro4989"
-description   = "TODO"
+description   = "dejo generates multiple language object definitions from json documents."
 license       = "MIT"
 srcDir        = "src"
 bin           = @["dejo"]
