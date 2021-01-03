@@ -8,7 +8,7 @@
 import tables
 import types, util
 
-proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
+proc parse*(self: JsonNode, nodeId: var int, objName: string): seq[Node] =
   case self.kind
   of JObject, JArray:
     result.add(Node(id: nodeId, name: objName, node: self))
@@ -25,3 +25,7 @@ proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
         result.add(child.parse(nodeId, objName = objName))
     else: discard
   else: discard
+
+proc parse*(self: JsonNode, objName = "Object"): seq[Node] =
+  var nodeId: int
+  return self.parse(nodeId, objName = objName)
