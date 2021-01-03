@@ -32,3 +32,14 @@ suite "proc parse":
       Node(id: 2, name: "Obj2", node: """{"f":1.2}""".parseJson),
     ]
     check want == got
+
+  test "ok: array":
+    node = """{"obj1":{"arr":[1,2,3]},"obj2":{"f":1.2}}""".parseJson
+    let got = node.parse(nodeId, objName = objName)
+    let want = @[
+      Node(id: 0, name: objName, node: node),
+      Node(id: 1, name: "Obj1", node: """{"arr":[1,2,3]}""".parseJson),
+      Node(id: 2, name: "Arr", node: """[1,2,3]""".parseJson),
+      Node(id: 3, name: "Obj2", node: """{"f":1.2}""".parseJson),
+    ]
+    check want == got
