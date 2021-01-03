@@ -50,7 +50,7 @@ suite "proc parse":
       Node(id: 0, name: objName, node: node),
       Node(id: 1, name: "Obj1", node: """{"arr":[[1,2,3],[4,5,6],[7,8,9]]}""".parseJson),
       Node(id: 2, name: "Arr", node: """[[1,2,3],[4,5,6],[7,8,9]]""".parseJson),
-      Node(id: 3, name: "Arr", node: """[1,2,3]""".parseJson),
+      Node(id: 3, name: "Arr_1", node: """[1,2,3]""".parseJson),
       Node(id: 4, name: "Obj2", node: """{"f":1.2}""".parseJson),
     ]
     check want == got
