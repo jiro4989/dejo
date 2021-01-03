@@ -15,8 +15,8 @@ proc parse*(self: JsonNode, nodeId: var int, objName = "Object"): seq[Node] =
 
     case self.kind
     of JObject:
+      inc(nodeId)
       for k, v in self.getFields:
-        inc(nodeId)
         result.add(v.parse(nodeId, objName = k.headUpper))
     of JArray:
       if 0 < self.elems.len():
