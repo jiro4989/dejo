@@ -1,5 +1,5 @@
 ====
-json2code
+dejo
 ====
 
 |nimble-version| |nimble-install| |gh-actions|
@@ -28,7 +28,7 @@ Installation
 
 .. code-block:: shell
 
-   $ nimble install -Y json2code
+   $ nimble install -Y dejo
 
 LICENSE
 =======
@@ -63,11 +63,11 @@ Config files are `.chglog <./.chglog>`_.
 
 Details, see `release.yml <./.github/workflows/release.yml>`_.
 
-.. |gh-actions| image:: https://github.com/jiro4989/json2code/workflows/test/badge.svg
-   :target: https://github.com/jiro4989/json2code/actions
-.. |nimble-version| image:: https://nimble.directory/ci/badges/json2code/version.svg
-   :target: https://nimble.directory/ci/badges/json2code/nimdevel/output.html
-.. |nimble-install| image:: https://nimble.directory/ci/badges/json2code/nimdevel/status.svg
-   :target: https://nimble.directory/ci/badges/json2code/nimdevel/output.html
+.. |gh-actions| image:: https://github.com/jiro4989/dejo/workflows/test/badge.svg
+   :target: https://github.com/jiro4989/dejo/actions
+.. |nimble-version| image:: https://nimble.directory/ci/badges/dejo/version.svg
+   :target: https://nimble.directory/ci/badges/dejo/nimdevel/output.html
+.. |nimble-install| image:: https://nimble.directory/ci/badges/dejo/nimdevel/status.svg
+   :target: https://nimble.directory/ci/badges/dejo/nimdevel/output.html
 
 .. |image-release-workflow| image:: https://user-images.githubusercontent.com/13825004/87944618-9897fc00-cada-11ea-9401-74167f04b5c4.png

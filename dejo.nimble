@@ -5,7 +5,7 @@ author        = "jiro4989"
 description   = "TODO"
 license       = "MIT"
 srcDir        = "src"
-bin           = @["json2code"]
+bin           = @["dejo"]
 binDir        = "bin"
 
 

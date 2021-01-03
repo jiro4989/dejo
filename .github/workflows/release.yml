@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'
 
 env:
-  APP_NAME: 'json2code'
+  APP_NAME: 'dejo'
   NIM_VERSION: 'stable'
   MAINTAINER: 'MAINTAINER'
   RELEASE_FILES: bin LICENSE README.*

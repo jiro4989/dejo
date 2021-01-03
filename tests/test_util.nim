@@ -1,6 +1,6 @@
 import unittest
 
-include json2codepkg/util
+include dejopkg/util
 
 suite "proc headUpper":
   test "ok: 'hello'":

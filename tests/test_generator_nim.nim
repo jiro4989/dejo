@@ -1,6 +1,6 @@
 import unittest
 
-include json2codepkg/[parser, generator_nim]
+include dejopkg/[parser, generator_nim]
 
 suite "proc generateNimCode":
   setup:

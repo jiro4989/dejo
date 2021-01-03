@@ -1,1 +1,1 @@
-import json2codepkg/[parser, types, util, generator_nim]
+import dejopkg/[parser, types, util, generator_nim]

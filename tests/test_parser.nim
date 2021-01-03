@@ -1,6 +1,6 @@
 import unittest
 
-include json2codepkg/parser
+include dejopkg/parser
 
 suite "proc parse":
   setup:
