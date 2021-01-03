@@ -2,3 +2,4 @@
 tests/test1
 
 tests/test_parser
+tests/test_generator_nim
